@@ -118,3 +118,14 @@ print("multiRowColLoc:\n{0}".format(multiRowColLoc))
 條件選擇：loc 可以與布林條件配合使用，選擇符合特定條件的行列。
 效率：在訪問單個值或者小區域時，直接使用 iloc 或 loc 通常更高效。但對於較大的區域或者整個行列的操作，使用條件選擇或直接列名可能更好。
 """
+
+data7 = {'apples': [3, 2], 'oranges': [4, 6]}
+df7 = pd.DataFrame(data7)
+print("data7:\n{0}".format(df7))
+#增加col
+df7['bananas'] = [5, 3]
+print("data7:\n{0}".format(df7))
+#增加row
+new_row = {'apples': 7, 'oranges': 8, 'bananas': 2}
+df7 = df7.append(new_row, ignore_index=True)
+print("data7:\n{0}".format(df7))
