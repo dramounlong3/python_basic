@@ -1,4 +1,6 @@
 import pandas as pd
+# import sys
+# sys.stdout.reconfigure(encoding='utf-8')
 s = pd.Series([1,3,5,7,9])
 print(s)
 
@@ -129,3 +131,102 @@ print("data7:\n{0}".format(df7))
 new_row = {'apples': 7, 'oranges': 8, 'bananas': 2}
 df7 = df7.append(new_row, ignore_index=True)
 print("data7:\n{0}".format(df7))
+
+#去除重複數據
+data8 = {'apples': [3, 2, 3, 8], 'oranges': [4, 6, 4, 6]}
+df8 = pd.DataFrame(data8)
+print(df8)
+df8 = df8.drop_duplicates() #row 2被刪掉
+print(df8)
+
+print()
+import numpy as np
+#刪除有缺失值的row
+data9 = {'apples': [3, np.nan, 3, 8], 'oranges': [4, 6, 4, 6], 'bananas':[1, 7, np.nan, 5]}
+df9 = pd.DataFrame(data9)
+print(df9)
+df9 = df9.dropna()
+print(df9)
+
+print()
+#刪除有缺失值的col
+data10 = {'apples': [3, np.nan, 3, 8], 'oranges': [4, 6, 4, 6], 'bananas':[1, 7, np.nan, 5]}
+df10 = pd.DataFrame(data10)
+print(df10)
+df10 = df10.dropna(axis='columns')
+print(df10)
+
+print()
+#刪除全部都是nan的row
+data11 = {'apples': [3, 1, np.nan, 8], 'oranges': [4, 6, np.nan, 6], 'bananas':[1, 7, np.nan, 5]}
+df11 = pd.DataFrame(data11)
+print(df11)
+df11 = df11.dropna(how='all') #any表示有nan就刪
+print(df11)
+
+print()
+#刪除有值的數量少於2的row
+data12 = {'apples': [3, 1, 9, 8], 'oranges': [4, 6, np.nan, np.nan], 'bananas':[1, 7, np.nan, 5]}
+df12 = pd.DataFrame(data12)
+print(df12)
+df12 = df12.dropna(thresh=2)
+print(df12)
+
+print()
+#將nan以指定值補上
+df13 = pd.DataFrame({
+    'A': [1, np.nan, 3],
+    'B': [4, 5, np.nan],
+    'C': [np.nan, np.nan, np.nan]
+})
+print(df13)
+#使用固定值補齊
+df_filled = df13.fillna(0)
+print(df_filled)
+#使用各col的平均值補齊
+df_filled = df13.fillna(df13.mean())
+print(df_filled)
+#使用nan的下一個值往上補齊
+df_filled = df13.fillna(method='ffill')
+print(df_filled)
+
+print()
+#計算出col的平均值
+df14 = pd.DataFrame({'apples': [3, 1, 9, 8], 'oranges': [4, 6, 9, 10]})
+print(df14.mean())
+
+print()
+# 轉換型別
+df15 = pd.DataFrame({
+    'A':['1','2','3'],
+    'B':['1.1','2.2','3.3'],
+    'C':['2021-01-01','2021-01-02','2021-01-03'],
+    'D': ['apple', 'banana', 'cherry']
+})
+print(df15.dtypes)
+df15['A'] = df15['A'].astype(int)
+df15['B'] = df15['B'].astype(float)
+df15['C'] = pd.to_datetime(df15['C'])
+df15['D'] = df15['D'].astype('category')
+print(df15.dtypes)
+
+print()
+# 修正數據
+df16 = pd.DataFrame({
+    'Age': [29,-1,0,25,120],
+    'Salary': ['10000$', '9000$', '8000$', '7000$', '6000$'],
+    'Name': ['Alice', 'Bob','', 'Charlie', 'David']
+})
+
+#修正年齡
+df16.loc[df16['Age'] < 0, 'Age'] = df16['Age'].median()
+df16.loc[df16['Age'] > 100, 'Age'] = df16['Age'].median()
+#修正薪水
+df16['Salary'] = df16['Salary'].str.replace('$', '', regex=False).astype(int)
+#修正空名字
+df16['Name'] = df16['Name'].replace('', 'Unknow')
+print(df16)
+
+
+
+
