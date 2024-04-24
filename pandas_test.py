@@ -227,6 +227,42 @@ df16['Salary'] = df16['Salary'].str.replace('$', '', regex=False).astype(int)
 df16['Name'] = df16['Name'].replace('', 'Unknow')
 print(df16)
 
+print()
+#資料合併
+df17 = pd.DataFrame(
+    {
+        'A': ['A0', 'A1', 'A2'],
+        'B': ['B0', 'B1', 'B2']
+    },
+    index = ['K0', 'K1', 'K2']
+)
+df18 = pd.DataFrame(
+    {
+        'C': ['C0', 'C2', 'C3'],
+        'D': ['D0', 'D2', 'D3']
+    },
+    index = ['K0', 'K2', 'K3']
+)
+#concat, 基於row的索引合併, K0 接 K0, 以新增col的方式合併, 若其中一邊沒有則以NaN補齊
+result1 = pd.concat([df17, df18], axis=1)
+#merge, 類似inner join, 兩個df都有的index才會以新增col的方式合併
+result2 = pd.merge(df17, df18, left_index=True, right_index=True, how='inner') #若改為how='outer', 則兩邊都會保留, 空值以NaN補齊, 變成與result1的結果相同
+#join, 類似left join, 若想要以df18為主, 則以df18.join起頭, 右半部沒有的值則以NaN補齊
+result3 = df17.join(df18)
+print("result1:")
+print(result1)
+print("result2:")
+print(result2)
+print("result3:")
+print(result3)
 
-
-
+print()
+#檔案處理
+#讀取csv
+df19 = pd.read_csv("class_info.csv", sep=',', encoding='big5')
+print("csv:")
+print(df19)
+#讀取xlsx
+df20 = pd.read_excel('class_info.xlsx', sheet_name=0)
+print("excel")
+print(df20)
