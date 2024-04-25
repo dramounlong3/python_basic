@@ -266,3 +266,77 @@ print(df19)
 df20 = pd.read_excel('class_info.xlsx', sheet_name=0)
 print("excel")
 print(df20)
+
+print()
+#group by
+col20 = ['class', 'name', 'hbd']
+data20 = [
+    ['class0', 'user0', '1993-10-01'],
+    ['class0', 'user1', '1992-10-02'],
+    ['class1', 'user2', '1990-10-01'],
+    ['class2', 'user3', '1983-10-03'],
+    ['class1', 'user4', '1991-10-02'],
+    ['class0', 'user5', '2001-10-03']
+]
+df20 = pd.DataFrame(data20, columns=col20)
+print("original data20")
+print(df20)
+df20_groupByClass = df20.groupby('class')
+print("df20 after group by class")
+print(df20_groupByClass.groups)
+print("df20 get group class1")
+print(df20_groupByClass.get_group('class1'))
+
+print()
+#聚合
+df21 = pd.DataFrame({
+    'Group': ['A', 'B', 'A', 'B', 'A', 'B'],
+    'Value': [1, 2, 3, 4, 5, 6],
+    'Grade': [99,100,10,20,30,50]
+})
+grouped = df21.groupby('Group').agg({'Value': lambda x: list(x)})
+print(grouped)
+grouped = df21.groupby('Group').agg(list)
+print(grouped) #與上方結果相同, 都是以Group為分組將Value以list的形式放在一起
+sumGroup = df21.groupby('Group').agg({'Value': [lambda x: list(x), 'sum']})
+print(sumGroup)
+sumGroupByAnotherWay = df21.groupby('Group')['Grade'].agg([list,sum]) #groupby後, 可以再用['col name']選擇欄位拿來做aggregate運算
+print(sumGroupByAnotherWay) #與上方結果相同, 都可以將分組後的list計算衝加總數字
+
+print()
+#any()
+my_string = "coding**is**so**cool**123"
+are_there_digits = [x.isdigit() for x in my_string] #迭代所有字串內的字元, 並且判斷是否為數字
+print("原始測試完的結果")
+print(are_there_digits)
+print("使用any判斷是否list內有任何一個true")
+print(any(are_there_digits))
+
+print()
+#all()
+my_alphabet = "this is my first time to check"
+are_there_alphabet = [y.isalpha() for y in my_alphabet] #判斷是否為字母
+print(all(are_there_alphabet))
+my_new_alphabet = my_alphabet.replace(" ","")
+print("new: ", my_new_alphabet)
+are_there_new_alphabet = [y.isalpha() for y in my_new_alphabet] #判斷是否為字母
+print("將空白取代為空字串後")
+print(all(are_there_new_alphabet))
+
+print()
+# 將資料by UserAccount groupby後, 將其他欄位整合成list格式, 並且將結果做迭代, 然後找出ReportOwner有含v的UserAccount
+data22 = {
+    'UserAccount': ['user1', 'user2', 'user3', 'user1'],
+    'ReportRLS': ['RLS1', 'RLS2', 'RLS3', 'RLS4'],
+    'ReportOwner': ['', 'owner2', 'v', 'dejief']
+}
+df22 = pd.DataFrame(data22)
+grouped = df22.groupby('UserAccount').agg({'ReportRLS': list, 'ReportOwner': list}).reset_index()
+print(grouped)
+print()
+last_element = None
+for index, element in grouped.iterrows():
+    if 'v' in element['ReportOwner']:
+        print("UserAccount:", element['UserAccount'])
+    else:
+        print("v not found")
