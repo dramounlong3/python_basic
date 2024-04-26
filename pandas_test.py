@@ -340,3 +340,25 @@ for index, element in grouped.iterrows():
         print("UserAccount:", element['UserAccount'])
     else:
         print("v not found")
+
+print()
+#連接db
+import pymssql
+sql_query = "select top 10 * from common.PBI_UserPermission with(nolock)"
+try:
+    #使用windows認證登入
+    with pymssql.connect(host = 'TWTPESQLDV2', database = 'BI_ETL') as conn:
+    #使用帳密登入
+    # with pymssql.connect(server = 'TWTPESQLDV2', database = 'BI_ETL', user = 'xxx', password = 'xxxxxx') as conn:
+        with conn.cursor() as cursor:
+            cursor.execute(sql_query)
+            # conn.commit() #使用insert才需要commit
+
+            #迭代撈取到的資料
+            rows = cursor.fetchall()
+            for row in rows:
+                print(row)
+
+    print("Select successful")
+except Exception as e:
+    print(f"Error selecting data: {str(e)}")
