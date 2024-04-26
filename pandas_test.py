@@ -357,7 +357,22 @@ try:
             #迭代撈取到的資料
             rows = cursor.fetchall()
             for row in rows:
-                print(row)
+                pass #print(row)
+
+            print(cursor.description)
+            print()
+            columns_ori = [column[0] for column in cursor.description] #取得欄位名稱
+            types = [column[1] for column in cursor.description]   #取得資料型態, 但目前看是數字 (可能1對應到NVARCHAR, 4對應到DATETIME)
+            print(columns_ori)
+            print(types)
+
+            #將取得的資料放到DF中
+            print()
+            df23 = pd.DataFrame(rows)  #如果沒加上columns的設定, 則col_name 預設是以數字編排
+            print(df23)
+            df24 = pd.DataFrame(rows, columns=columns_ori)
+            print()
+            print(df24)
 
     print("Select successful")
 except Exception as e:
