@@ -51,6 +51,9 @@ while(i <= 5):
 #for
 for l in list1:
     print("list1= " + str(l))
+# for in range
+for x in range(5): # ==> 所以可以用list的length來迭代, 不會超過list的index
+    print(x) # 0 ~ 4
     
 #for nested
 twoDemisonList = [
