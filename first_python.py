@@ -1,4 +1,5 @@
 #設定標準輸出為utf-8的格式, 避免中文為亂碼
+import json
 import sys
 sys.stdout.reconfigure(encoding='utf-8')
 
@@ -114,3 +115,37 @@ df1 = pd.DataFrame({
     "score": [100,99,60]
               })
 print(df1.head(2))
+
+
+#json轉換
+var_test = 88
+
+pytohn_obj = {
+    "a": 123,
+    "b": 456,
+    "c": [1,2,3,4,5],
+    "d": False,
+    "obj": {
+        "x": 1,
+        "y": True,
+        "jhk": ['aa','bb',33, False],
+        25: 99,
+        var_test: [9,8, {'66':6}]
+    }
+}
+print(type(pytohn_obj), pytohn_obj)
+print("pytohn_obj['c'][2]:", pytohn_obj['c'][2])
+print("pytohn_obj['obj']['y']:", pytohn_obj['obj']['y'])
+# 由python dict轉json
+string_of_json = json.dumps(pytohn_obj)
+print(type(string_of_json), string_of_json)
+print("string_of_json[4]:", string_of_json[4]) #字串用index指定字元索引
+# 由string_of_json轉python_obj
+new_python_obj = json.loads(string_of_json)
+print("type(new_python_obj):", type(new_python_obj))
+print("pytohn_obj['obj']['jhk'][2]:", pytohn_obj['obj']['jhk'][2])
+print("pytohn_obj['obj'][25]:", pytohn_obj['obj'][25]) #key值是數字
+print("pytohn_obj['obj'][88][2]:", pytohn_obj['obj'][88][2]) #key值是數字變數, 用數字找
+print("pytohn_obj['obj'][var_test][2]:", pytohn_obj['obj'][var_test][2]) #key值是數字變數, 用變數找
+print("pytohn_obj['obj'][var_test][2]:", pytohn_obj['obj'][var_test][2]['66']) #key值是數字變數, 用變數找
+
