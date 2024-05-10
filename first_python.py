@@ -149,3 +149,116 @@ print("pytohn_obj['obj'][88][2]:", pytohn_obj['obj'][88][2]) #key值是數字變
 print("pytohn_obj['obj'][var_test][2]:", pytohn_obj['obj'][var_test][2]) #key值是數字變數, 用變數找
 print("pytohn_obj['obj'][var_test][2]:", pytohn_obj['obj'][var_test][2]['66']) #key值是數字變數, 用變數找
 
+
+print()
+# lambda
+def my_func_1(x):
+    return x*100
+my_func_1_result = my_func_1(77)
+print("my_func_1_result", my_func_1_result)
+arr = list(range(1, 6)) #不含6
+print("arr", arr)
+lambda_result = list(map(lambda x: x*100, arr))
+print("lambda_result", lambda_result)
+
+#鐵達尼號的範例資料
+#計算出每個人是否高於所有人的平均年齡
+import seaborn as sns 
+data = sns.load_dataset('titanic')
+data = data.loc[:, ['who', 'age', 'survived']] #只挑此三種欄位
+print("data.head()", data.head())
+tmp = data.copy() #複製一份data
+print("tmp", tmp)
+#原始做法
+tmp['avg_age'] = tmp['age'].mean() #新增avg_age欄位, 值為age欄位的平均
+tmp['diff_from_avg_age'] = tmp['age'] - tmp['avg_age'] #將每個人的年齡減去平均年齡並存放在新欄位
+tmp['if_age_greater_than_avg'] = tmp['diff_from_avg_age'] > 0 #存放每個人的年齡是否大於平均年齡的結果
+pd.options.display.max_columns = None
+print("tmp\n", tmp)
+#應用assign做法
+new_data = data.assign( #x就是data
+    avg_age = lambda x: x['age'].mean(),
+    #以下開始lamda的參數都會有avg_age的欄位
+    diff_from_avg_age = lambda x: x['age'] - x['avg_age'],
+    if_age_greater_than_avg = lambda x: x['diff_from_avg_age'] > 0
+)
+print("new_data\n", new_data)
+
+print("who")
+group_data = data.groupby('who').apply(lambda x: print(x, "\n"))
+gp_data = data.groupby('who') #分組後會得到DataFrameGroupBy的類別
+print("gp_data", gp_data)
+
+print()
+#藉由man, woman, child分組後, 拿age欄位 做聚合函數計算 => 分別做 最小, 最大....
+agg_data = gp_data['age'].agg(['min', 'max', 'mean', 'median'])
+print("agg_data", agg_data)
+
+print()
+unique_values = data['who'].unique() #類似像把who這個欄位做distinct
+print("unique_values", unique_values)
+
+group_survived_man = gp_data.get_group('man') #只能get_group who有的值
+print("group_survived_man\n", group_survived_man)
+
+#重新編列row index, 上面會保留原本的row index
+group_survived_man_reset_index = gp_data.get_group('man').reset_index()
+print("group_survived_man_reset_index\n", group_survived_man_reset_index)
+
+print()
+#計算每種類型的人有多少人, child:83人, woman:271人, man:537人
+human_count = data.value_counts('who')
+print("human_count\n", human_count)
+#再將上面的human_count結果拿去相加 => 83+271+537=891
+sum_human_count = data.value_counts('who').sum()
+print("sum_human_count", sum_human_count)
+
+
+print()
+# apply應用
+# 創建DataFrame
+data = {'姓名': ['小明', '小華', '小美'],
+        '國文成績': [85, 90, 88],
+        '數學成績': [92, 88, 95],
+        '英文成績': [78, 85, 80]}
+df = pd.DataFrame(data)
+
+print(df)
+
+# 定義一個函數，用於計算總成績
+def calculate_total(row):
+    total_score = row['國文成績'] + row['數學成績'] + row['英文成績']
+    return total_score
+
+# 使用apply方法應用自定義函數到每一行，計算每個學生的總成績
+df['總成績'] = df.apply(calculate_total, axis=1)
+
+print(df)
+
+print()
+def cal_total_by_axis0(col):
+    total = col.sum()
+    return total
+#計算每個人的各科總成績
+subject_score = df.apply(cal_total_by_axis0, axis=0) 
+print(subject_score)
+print(subject_score['總成績'])
+#改計算每科的總分數
+merge_score = df.apply(cal_total_by_axis0, axis=0).reset_index() #如果沒有reset_index, 原本欄位的名稱會變row的index
+print(merge_score)
+print(merge_score.iloc[:, 1:2]) #[row_start:row_end, col_start:col_end]
+
+
+
+# lstrip rstrip
+mystring = '//_//MFG//AB/C/DEFG/TEST///'
+# lstrip會將左邊連續的/刪除
+reportPath = "/" + mystring.lstrip("/")  #故此段語法結束後 最前面只會有一個/
+
+print(reportPath)
+
+# rstrip會將右邊連續的/刪除
+reportPath = reportPath.rstrip("/") + "/" #故此段語法結束後 最後面只會有一個/
+
+print(reportPath)
+
