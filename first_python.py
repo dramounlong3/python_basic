@@ -262,3 +262,15 @@ reportPath = reportPath.rstrip("/") + "/" #故此段語法結束後 最後面只
 
 print(reportPath)
 
+
+
+# os.path.join
+import os
+path1 = r"D:\abcd\efg" #r會忽略跳脫字元\, 當作字串處理
+path2 = r"hijk\lmn"
+path3 = r"\vv\bb\n" #最前面為\定會被當作是絕對路徑, 如果要當作子路徑與其他路徑串接須將最前面的\去除
+if path3.startswith(os.sep): #os.sep是當下作業系統的分隔符號, windows:\  ;  unix:/
+    path3 = path3.lstrip(os.sep)
+filename = 'testfile.xlsx'
+result_path = os.path.join(path1,path2,path3,filename)
+print(result_path)
