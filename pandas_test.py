@@ -377,3 +377,21 @@ try:
     print("Select successful")
 except Exception as e:
     print(f"Error selecting data: {str(e)}")
+    
+    
+    
+
+# explode
+# 可將名聲有多筆的人展開成多列
+# 1.df_explode['名聲'].str.split(',') ==> 將名聲的這個column的內容以逗號做切割, 轉換為 list
+# 2.df_explode.assign(名聲 = ...)     ==> 將名聲(若名稱不存在就會新增column), 的內容重新指定為步驟1 list的結果
+# 3.dataFrame.explode('名聲')         ==> 將dataFrame以名聲欄位為主, 將list中的多個元素展開來為不同列, 其他欄位的值就與原本那一列的內容相同
+import sys
+sys.stdout.reconfigure(encoding='utf-8')
+
+df_explode = pd.read_excel("class_info.xlsx")
+print("原始:df_explode\n", df_explode)
+df_assign = df_explode.assign(名聲 = df_explode['名聲'].str.split(','))
+print("assign\n", df_assign)
+df_explode = df_explode.assign(名聲 = df_explode['名聲'].str.split(',')).explode('名聲')
+print("展開後: df_explode\n", df_explode)

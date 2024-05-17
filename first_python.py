@@ -274,3 +274,21 @@ if path3.startswith(os.sep): #os.sep是當下作業系統的分隔符號, window
 filename = 'testfile.xlsx'
 result_path = os.path.join(path1,path2,path3,filename)
 print(result_path)
+
+
+
+
+
+rls_column = ['col1', 'col2', 'col3']  # 从 Excel 中取出的列标签列表
+rule_field_names = ['col2', 'col1', 'col4', 'col3']  # 从数据库中取出的字段名列表
+
+# 将列表转换为集合，并使用集合操作检查是否所有的 rls_column 存在于 rule_field_names 中
+if set(rls_column).issubset(rule_field_names):
+    print("All columns in rls_column exist in rule_field_names.")
+    result = True
+else:
+    missing_columns = set(rls_column) - set(rule_field_names)
+    print(f"The following columns are missing in rule_field_names: {missing_columns}")
+    result = False
+
+print("Result:", result)
