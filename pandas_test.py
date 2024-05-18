@@ -395,3 +395,33 @@ df_assign = df_explode.assign(名聲 = df_explode['名聲'].str.split(','))
 print("assign\n", df_assign)
 df_explode = df_explode.assign(名聲 = df_explode['名聲'].str.split(',')).explode('名聲')
 print("展開後: df_explode\n", df_explode)
+
+
+import json
+
+all_sheet = pd.read_excel("class_info.xlsx", sheet_name=['class1','class2'])
+print("\nall_sheet\n", all_sheet)
+
+#將各自的sheet補上sheet_name欄位, 並且給予原本的sheet name名稱
+for name, sheet in all_sheet.items():
+    sheet['sheet_name'] = name
+
+sheet1 = all_sheet['class1']
+sheet2 = all_sheet['class2']
+
+print("\nsheet1\n", sheet1)
+print("\nsheet2\n", sheet2)
+
+merged_class = pd.concat([sheet1, sheet2], ignore_index=True)
+print("\nmerged_class\n", merged_class)
+list_str_calss = [merged_class.to_json()]
+print("\nlist_str_calss\n", list_str_calss)
+
+df_from_json = pd.read_json(list_str_calss[0])
+print("\ndf_from_json\n", df_from_json)
+df_class2 = df_from_json[df_from_json['sheet_name'] == 'class2'].reset_index(drop=True)
+print("\ndf_class2\n", df_class2)
+print("\ntype(df_class2)\n", type(df_class2))
+df_class1 = df_from_json[df_from_json['sheet_name'] == 'class1'].reset_index(drop=True)
+print("\ndf_class1\n", df_class1)
+print("\ntype(df_class1)\n", type(df_class1))
