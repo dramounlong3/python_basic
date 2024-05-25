@@ -425,3 +425,16 @@ print("\ntype(df_class2)\n", type(df_class2))
 df_class1 = df_from_json[df_from_json['sheet_name'] == 'class1'].reset_index(drop=True)
 print("\ndf_class1\n", df_class1)
 print("\ntype(df_class1)\n", type(df_class1))
+
+
+
+# pd.read_json, pd.DataFrame, json_loads, json_dumps, json_load, json_dump, pd.json_normalize
+# pd.read_json          將 json 字串 讀取後轉為 dataFrame
+# json_loads            將 json 字串 讀取後轉為 python dict/list
+# pd.DataFrame          將 python dict/list 或 json格式的檔案 讀取後轉為 dataFrame
+
+# json_dumps            將 python dict/list 讀取後轉為 json 字串
+# json_dump             將 python dict/list 讀取後轉為 json 字串檔案
+# json_load             將 json 字串檔案     讀取後轉為 python dict/list
+# pd.json_normalize     將 python dict/list 讀取後轉為 dataFrame (但內容表達的方式 與 pd.DataFrame轉過來的方式不太一樣)
+# https://www.geeksforgeeks.org/how-to-read-json-files-with-pandas/ 參考內容
