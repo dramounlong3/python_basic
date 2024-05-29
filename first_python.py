@@ -292,3 +292,82 @@ else:
     result = False
 
 print("Result:", result)
+
+
+
+
+
+
+import json
+import pandas as pd
+from loguru import logger
+import sys
+import pymssql
+
+# 測試None和len可否同時運作
+def test_none_len():
+    data = []
+    data.append('abc')
+    if data is None or len(data) == 0:
+        print("data length = 0")
+    else:
+        print("data has no attribute len.")
+
+# extend => 將陣列拆開來以單一元素的方式加入另一個陣列; append一次只能加入一個元素, 如果放的是陣列就會變二維陣列
+def test_extend():
+    a = [9]
+    b = [2, 5, 8]
+    print('origin a', a)
+    print('origin b', b)
+
+    a.extend(b)
+    print('a.extend(b): ', a)
+
+#發生exception後, 走完finally, 仍然會進入下一次迴圈, 但如果其中一個迴圈跳exception時有raise Error就不會繼續迭代
+def test_try():
+    temp = -2
+    for x in range(3):
+        try:
+            print(x)
+            temp = temp + 1
+            a = 1/temp
+            print('answer', a)
+        except Exception as e:
+            print('error: ', str(e))
+            # raise RuntimeError("break?") ==> 會使程式中斷
+        finally:
+            print('finally')
+
+# 測試loguru要輸出的到console的設定
+def test_loguru():
+    logger.configure(handlers=[{"sink": sys.stdout, "level": "TRACE"}])
+    logger.trace('trace log')
+
+def test_transaction():
+     with pymssql.connect(host = 'TWTPESQLDV2', database = 'BI_Data_Alert') as conn:
+        with conn.cursor() as cursor:
+            try:
+                insert_statement = f"""
+                     INSERT INTO dbo.Project([Project_ID], [Project_Name], [PM], [Source_Server], [Source_DB])
+                     VALUES('2', 'SQMS', 'Peter.Pan', 'TWTEPSQLDV2', 'SQMS')
+                """
+                cursor.execute(insert_statement)
+                print("insert successfully.")
+
+                x = 1/0
+                print("x = ", x)
+
+                delete_statement = f"""
+                    DELETE FROM dbo.Project
+                    WHERE Project_ID = 2
+                """
+
+                cursor.execute(delete_statement)
+
+                print("delete successfully.")
+                conn.commit() #使用insert, delete才需要commit, 在commit之前, pymssql都屬於begin transaction的狀態
+            except Exception as e:
+                conn.rollback() #如果前面已經commit後, 才執行rollback也沒有效用了, 所以其實如果前面是最後才做commit, 也無須在這裡寫rollback, 因為沒執行到最後就不會commit
+                print(f"something error:", {str(e)})
+
+test_try()
