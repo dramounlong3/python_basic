@@ -438,3 +438,8 @@ print("\ntype(df_class1)\n", type(df_class1))
 # json_load             將 json 字串檔案     讀取後轉為 python dict/list
 # pd.json_normalize     將 python dict/list 讀取後轉為 dataFrame (但內容表達的方式 與 pd.DataFrame轉過來的方式不太一樣)
 # https://www.geeksforgeeks.org/how-to-read-json-files-with-pandas/ 參考內容
+
+
+
+data = pd.read_csv("https://raw.githubusercontent.com/turingplanet/pandas-intro/main/public-datasets/country.csv")
+print(data)
