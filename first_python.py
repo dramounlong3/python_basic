@@ -369,5 +369,36 @@ def test_transaction():
             except Exception as e:
                 conn.rollback() #如果前面已經commit後, 才執行rollback也沒有效用了, 所以其實如果前面是最後才做commit, 也無須在這裡寫rollback, 因為沒執行到最後就不會commit
                 print(f"something error:", {str(e)})
+                
+                
+# 若自己本身無exception, 且caller有對應的exception則會被捕獲
+def another_no_try():
+    print('another')
+    raise ValueError #被caller的Value Error捕獲
+                
+                
+#內層raise error時若無對應exception, 是否會被外層的exception捕獲
+def test_nest_try():
+    try:
+        print("outer")
+        #如果是透過call別的function, 對方無try exception, 那麼raise的error就會被caller的對應exception給捕獲
+        another_no_try()
+        
+        #如果自己本身有raise可捕捉的exception則會被自己的exception捕獲, 若沒有對應的exception則會到外層被對應的exception捕獲, 若都沒有則都不會被捕獲, 只會純粹噴錯
+        # try:
+        #     print("inner")
+        #     raise TabError # ==> 被外層的Exception捕獲
+        # except KeyError as e:
+        #     print("inner error")
+    except ValueError:
+        print("outer value error")
+    except Exception as e:
+        print("outer error")
+    
 
-test_try()
+test_nest_try()
+
+#當前面的程式(test_nest_try, another_no_try)發生error時, 若無對應的exception捕獲, 則print("123")就不會被執行, 程式會在噴錯的當下就停止
+#但若有對應的exception捕獲後, 就可以讓程式繼續順利進行
+#也就是說無論在哪裡raise xxxError, 只要後面有捕獲到, 程式則會繼續往後進行, 反之則否
+print("123")
