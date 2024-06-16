@@ -410,7 +410,7 @@ from event_log import Event_log
 
 logger = Event_log()
 # 传入不同级别的日志消息
-logger.log_message("trace", "This is a TRACE message")
+logger.log_message("TRACE", "This is a TRACE message")
 logger.log_message("DEBUG", "This is a DEBUG message")
 logger.log_message("INFO", "This is an INFO message")
 logger.log_message("WARNING", "This is a WARNING message")

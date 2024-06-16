@@ -1,5 +1,5 @@
+# b.py
 import logging
-
 
 class Event_log:
     def __init__(self):
@@ -16,6 +16,7 @@ class Event_log:
         # 设置 logging 配置，只输出到控制台
         logging.basicConfig(level=TRACE_LEVEL_NUM, 
                             format='%(asctime)s - %(levelname)s - %(message)s')
+        
 
     def log_message(self, level, message):
         # 定义日志级别映射字典
@@ -32,7 +33,7 @@ class Event_log:
         log_method = level_methods.get(level.upper(), logging.info)
         log_method(message)
         
-         # 如果级别大于等于 INFO，则调用 sys_log 方法
+        # 如果级别大于等于 INFO，则调用 sys_log 方法
         if logging.getLevelName(level.upper()) >= logging.getLevelName('INFO'):
             self.sys_log(level, message)
         
