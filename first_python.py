@@ -402,3 +402,17 @@ test_nest_try()
 #但若有對應的exception捕獲後, 就可以讓程式繼續順利進行
 #也就是說無論在哪裡raise xxxError, 只要後面有捕獲到, 程式則會繼續往後進行, 反之則否
 print("123")
+
+
+
+#logging test
+from event_log import Event_log
+
+logger = Event_log()
+# 传入不同级别的日志消息
+logger.log_message("trace", "This is a TRACE message")
+logger.log_message("DEBUG", "This is a DEBUG message")
+logger.log_message("INFO", "This is an INFO message")
+logger.log_message("WARNING", "This is a WARNING message")
+logger.log_message("ERROR", "This is an ERROR message")
+logger.log_message("CRITICAL", "This is a CRITICAL message")
